@@ -14,7 +14,11 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: tgymnich/fork-sync@v1.4
+      - uses: actions/checkout@v2
+      - name: repo-sync
+        uses: repo-sync/github-sync@v2
         with:
-          owner:  AppDaemon
-          merge_method: rebase
+          source_repo: AppDaemon/appdaemon
+          source_branch: "*"
+          destination_branch: "*"
+          sync_tags: "true"
