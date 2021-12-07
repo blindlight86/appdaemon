@@ -23,9 +23,9 @@ jobs:
           destination_branch: "*"
           github_token: ${{ secrets.PAT }}
           sync_tags: "true"
-      - uses: actions/checkout@v2
-        with:
-          ref: 'dev'
-      - run: |
-          sed -i 's/-alpine//' Dockerfile
+#       - uses: actions/checkout@v2
+#         with:
+#           ref: 'dev'
+#       - run: |
+#           sed -i 's/-alpine//' Dockerfile
           
