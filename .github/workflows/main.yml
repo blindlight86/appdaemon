@@ -35,7 +35,7 @@ jobs:
           ref: 'dev'
 
       - run: |
-          sed -i 's/-alpine//' ./Dockerfile
+          sed -i 's/-alpine//' Dockerfile
           - name: Commit files
       - run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
