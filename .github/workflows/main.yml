@@ -37,6 +37,7 @@ jobs:
       - run: |
           sudo sed -i 's/-alpine//' Dockerfile
           sudo sed -i 's/apk add/apt-get install/' Dockerfile
+          sudo sed -i 's/--no-cache/-y/' Dockerfile
       - name: Commit files
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
