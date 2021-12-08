@@ -42,6 +42,7 @@ jobs:
           sudo sed -i 's/build-base/build-essential/' Dockerfile
           sudo sed -i 's/openssl-dev/openssl libssl-dev/' Dockerfile
           sudo sed -i '/# Install dependencies/a\RUN apt update && apt -y upgrade' Dockerfile
+          sudo sed -i '/#install user-specific packages/a\apt update' dockerStart.sh
           sudo sed -i 's/apk add --no-cache/apt install -y/' dockerStart.sh
       - name: Commit files
         run: |
