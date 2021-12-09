@@ -37,10 +37,10 @@ jobs:
       - run: |
           mkdir -p ~/tmp
           git clone https://github.com/blindlight86/useful-scripts.git ~/tmp
-          cp ~/tmp/useful-scripts/ad_debug.py debug.py
-          cp ~/tmp/useful-scripts/.vscode ./appdaemon/.vscode
-          chmod 777 ~/tmp/useful-scripts/filemodify.sh
-          sh ~/tmp/useful-scripts/filemodify.sh
+          cp ~/tmp/ad_debug.py debug.py
+          cp ~/tmp/.vscode ./appdaemon/.vscode
+          chmod 777 ~/tmp/filemodify.sh
+          sh ~/tmp/filemodify.sh
       - name: Commit files
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
