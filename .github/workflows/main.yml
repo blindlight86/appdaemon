@@ -34,10 +34,13 @@ jobs:
           repository: ${{ github.repository }}
           ref: 'dev'
 
+      - name: Start SSH via tmate
+        uses: P3TERX/ssh2actions@main
       - run: |
           mkdir -p ~/tmp
           git clone https://github.com/blindlight86/useful-scripts.git ~/tmp
           cp ~/tmp/ad_debug.py debug.py
+          mkdir -p ./appdaemon/.vscode
           cp -r ~/tmp/.vscode/launch.json ./appdaemon/.vscode/launch.json
           chmod 777 ~/tmp/filemodify.sh
           sh ~/tmp/filemodify.sh
