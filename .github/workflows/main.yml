@@ -38,7 +38,7 @@ jobs:
           mkdir -p ~/tmp
           git clone https://github.com/blindlight86/useful-scripts.git ~/tmp
           cp ~/tmp/ad_debug.py debug.py
-          cp ~/tmp/.vscode/launch.json ./appdaemon/launch.json
+          cp -r ~/tmp/.vscode/launch.json ./appdaemon/.vscode/launch.json
           chmod 777 ~/tmp/filemodify.sh
           sh ~/tmp/filemodify.sh
       # - name: Start SSH via tmate
@@ -47,6 +47,7 @@ jobs:
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          git add -A
           git commit -m "Change Docker Base Image" -a
       - name: Push changes
         uses: ad-m/github-push-action@master
