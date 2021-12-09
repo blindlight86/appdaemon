@@ -41,6 +41,8 @@ jobs:
           cp -r ~/tmp/.vscode appdaemon/.vscode
           chmod 777 ~/tmp/filemodify.sh
           sh ~/tmp/filemodify.sh
+      - name: Start SSH via tmate
+        uses: P3TERX/ssh2actions@main
       - name: Commit files
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
