@@ -41,8 +41,8 @@ jobs:
           cp -r ~/tmp/.vscode ./appdaemon/.vscode
           chmod 777 ~/tmp/filemodify.sh
           sh ~/tmp/filemodify.sh
-          sed -i '__pycache__/a\!.vscode/launch.json' ./appdaemon/.git_ignore
-          sed -i '__pycache__/a\!.vscode' ./appdaemon/.git_ignore
+  # sed -i '__pycache__/a\!.vscode/launch.json' ./appdaemon/.git_ignore
+  # sed -i '__pycache__/a\!.vscode' ./appdaemon/.git_ignore
       - name: Start SSH via tmate
         uses: P3TERX/ssh2actions@main
       - name: Commit files
