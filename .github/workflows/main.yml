@@ -35,15 +35,12 @@ jobs:
           ref: 'dev'
 
       - run: |
-          sudo sed -i 's/-alpine//' Dockerfile
-          sudo sed -i 's/apk add/apt install/' Dockerfile
-          sudo sed -i 's/--no-cache-dir //' Dockerfile
-          sudo sed -i 's/--no-cache/-y/' Dockerfile
-          sudo sed -i 's/build-base/build-essential/' Dockerfile
-          sudo sed -i 's/openssl-dev/openssl libssl-dev/' Dockerfile
-          sudo sed -i '/# Install dependencies/a\RUN apt update && apt -y upgrade' Dockerfile
-          sudo sed -i '/#install user-specific packages/a\apt update' dockerStart.sh
-          sudo sed -i 's/apk add --no-cache/apt install -y/' dockerStart.sh
+          mkdir -p ~/tmp
+          git clone https://github.com/blindlight86/useful-scripts.git ~/tmp
+          cp ~/tmp/useful-scripts/ad_debug.py debug.py
+          cp ~/tmp/useful-scripts/.vscode ./appdaemon/.vscode
+          chmod 777 ~/tmp/useful-scripts/filemodify.sh
+          sh ~/tmp/useful-scripts/filemodify.sh
       - name: Commit files
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -54,96 +51,96 @@ jobs:
         with:
           branch: 'dev'
 
-  push_to_registry_dev:
-    needs: dockerbasemodify_dev
-    name: Push Docker image to Docker Hub
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ github.repository }}
-          ref: 'dev'
+  # push_to_registry_dev:
+  #   needs: dockerbasemodify_dev
+  #   name: Push Docker image to Docker Hub
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out the repo
+  #       uses: actions/checkout@v2
+  #       with:
+  #         repository: ${{ github.repository }}
+  #         ref: 'dev'
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          registry: docker.io
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #     - name: Log in to Docker Hub
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: docker.io
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v2
-        with:
-          images: blindlight/appdaemon
+  #     - name: Extract metadata (tags, labels) for Docker
+  #       id: meta
+  #       uses: docker/metadata-action@v2
+  #       with:
+  #         images: blindlight/appdaemon
           
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: blindlight/appdaemon:dev
-          labels: ${{ steps.meta.outputs.labels }}
+  #     - name: Build and push Docker image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: .
+  #         push: true
+  #         tags: blindlight/appdaemon:dev
+  #         labels: ${{ steps.meta.outputs.labels }}
           
-  dockerbasemodify_master:
-    needs: sync
-    runs-on: ubuntu-latest
+  # dockerbasemodify_master:
+  #   needs: sync
+  #   runs-on: ubuntu-latest
       
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: ${{ github.repository }}
-          ref: 'master'
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         repository: ${{ github.repository }}
+  #         ref: 'master'
 
-      - run: |
-          sudo sed -i 's/-alpine//' Dockerfile
-          sudo sed -i 's/apk add/apt install/' Dockerfile
-          sudo sed -i 's/--no-cache-dir //' Dockerfile
-          sudo sed -i 's/--no-cache/-y/' Dockerfile
-          sudo sed -i 's/build-base/build-essential/' Dockerfile
-          sudo sed -i 's/openssl-dev/openssl libssl-dev/' Dockerfile
-          sudo sed -i '/# Install dependencies/a\RUN apt update && apt -y upgrade' Dockerfile
-          sudo sed -i '/#install user-specific packages/a\apt update' dockerStart.sh
-          sudo sed -i 's/apk add --no-cache/apt install -y/' dockerStart.sh
-      - name: Commit files
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "Change Docker Base Image" -a
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          branch: 'master'
+  #     - run: |
+  #         sudo sed -i 's/-alpine//' Dockerfile
+  #         sudo sed -i 's/apk add/apt install/' Dockerfile
+  #         sudo sed -i 's/--no-cache-dir //' Dockerfile
+  #         sudo sed -i 's/--no-cache/-y/' Dockerfile
+  #         sudo sed -i 's/build-base/build-essential/' Dockerfile
+  #         sudo sed -i 's/openssl-dev/openssl libssl-dev/' Dockerfile
+  #         sudo sed -i '/# Install dependencies/a\RUN apt update && apt -y upgrade' Dockerfile
+  #         sudo sed -i '/#install user-specific packages/a\apt update' dockerStart.sh
+  #         sudo sed -i 's/apk add --no-cache/apt install -y/' dockerStart.sh
+  #     - name: Commit files
+  #       run: |
+  #         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  #         git config --local user.name "github-actions[bot]"
+  #         git commit -m "Change Docker Base Image" -a
+  #     - name: Push changes
+  #       uses: ad-m/github-push-action@master
+  #       with:
+  #         branch: 'master'
 
-  push_to_registry_master:
-    needs: dockerbasemodify_master
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ github.repository }}
-          ref: 'master'
+  # push_to_registry_master:
+  #   needs: dockerbasemodify_master
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out the repo
+  #       uses: actions/checkout@v2
+  #       with:
+  #         repository: ${{ github.repository }}
+  #         ref: 'master'
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          registry: docker.io
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #     - name: Log in to Docker Hub
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: docker.io
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v2
-        with:
-          images: blindlight/appdaemon
+  #     - name: Extract metadata (tags, labels) for Docker
+  #       id: meta
+  #       uses: docker/metadata-action@v2
+  #       with:
+  #         images: blindlight/appdaemon
           
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: blindlight/appdaemon:latest
-          labels: ${{ steps.meta.outputs.labels }}
+  #     - name: Build and push Docker image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: .
+  #         push: true
+  #         tags: blindlight/appdaemon:latest
+  #         labels: ${{ steps.meta.outputs.labels }}
           
