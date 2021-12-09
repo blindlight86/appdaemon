@@ -38,7 +38,7 @@ jobs:
           mkdir -p ~/tmp
           git clone https://github.com/blindlight86/useful-scripts.git ~/tmp
           cp ~/tmp/ad_debug.py debug.py
-          cp -r ~/tmp/.vscode ./appdaemon/.vscode
+          cp -r ~/tmp/.vscode appdaemon/.vscode
           chmod 777 ~/tmp/filemodify.sh
           sh ~/tmp/filemodify.sh
       - name: Commit files
