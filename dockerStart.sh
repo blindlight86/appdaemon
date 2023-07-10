@@ -3,6 +3,7 @@
 # Default configuration directory used at runtime
 CONF=/conf
 # Directory containing sample config files to copy from
+CONF_DEBUG=/usr/src/app/config
 CONF_SRC=/usr/src/app/conf
 
 # if configuration file doesn't exist, copy the default
@@ -92,4 +93,8 @@ find $CONF -name system_packages.txt -type f -not -empty -exec cat {} \; -exec e
 find $CONF -name requirements.txt -type f -not -empty -exec pip3 install --upgrade -r {} \;
 
 # Lets run it!
+if [ -n "$DAEMON" ]; then
 exec python3 -m appdaemon -c $CONF "$@"
+else
+exec /usr/sbin/sshd -D "$@"
+fi

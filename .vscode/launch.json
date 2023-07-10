@@ -1,16 +1,16 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.1.0",
     "configurations": [
         {
-            "name": "AppDaemon Dev",
+            "name": "AppDaemon Debug",
             "type": "python",
             "request": "launch",
-            "module": "appdaemon",
-            "justMyCode": true,
-            "args": "-c /home/hass/ad_config/dev_test --toml"
-        },
+            "program": "${workspaceRoot}/debug.py", //运行AD
+            "console": "integratedTerminal",
+            "args": ["-c", "config"], //指定配置文件
+        }
     ]
 }
