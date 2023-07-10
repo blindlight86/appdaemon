@@ -1,7 +1,7 @@
 # When changing this, make sure that the python major and minor version matches that provided by alpine's python3
 # package (see https://pkgs.alpinelinux.org/packages), otherwise alpine py3-* packages won't work
 ARG PYTHON_RELEASE=3.10 ALPINE_VERSION=3.17
-ARG BASE_IMAGE=python:${PYTHON_RELEASE}-alpine${ALPINE_VERSION}
+ARG BASE_IMAGE=python:${PYTHON_RELEASE}${ALPINE_VERSION}
 # Image for building dependencies (on architectures that don't provide a ready-made Python wheel)
 FROM ${BASE_IMAGE} as builder
 
@@ -16,13 +16,13 @@ ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
 
 # If on ARM architecture install system packages to build native dependencies:
 # - git and rust: build the `orsjson` package (required by `deepdiff`)
-# - cython and build-base: build the `uvloop` package (build-base contains the set of basic tools to compile with gcc)
+# - cython and build-essential: build the `uvloop` package (build-base contains the set of basic tools to compile with gcc)
 # Install system dependencies, saving the apk cache with docker mount: https://docs.docker.com/build/cache/#keep-layers-small
 # Specify the architecture in the cache id, otherwise the apk cache of different architectures will conflict
 RUN --mount=type=cache,id=apk-${TARGETARCH}-${TARGETVARIANT},sharing=locked,target=/var/cache/apk/ \
     if [ "$TARGETARCH" = "arm" ]; then\
-        apk add git rust cargo &&\
-        apk add build-base cython;\
+        apt install git rust cargo &&\
+        apt install build-essential cython;\
     fi
 
 # Copy requirements file of AppDaemon
@@ -60,6 +60,7 @@ COPY ./dockerStart.sh .
 
 # API Port
 EXPOSE 5050
+EXPOSE 22
 
 # Mountpoints for configuration & certificates
 VOLUME /conf
@@ -72,4 +73,4 @@ ENV PYTHONPATH=/usr/lib/python${PYTHON_RELEASE}:/usr/lib/python${PYTHON_RELEASE}
 ENTRYPOINT ["./dockerStart.sh"]
 
 # Install curl to allow for healthchecks
-RUN apk --no-cache add curl
+RUN apk -y add curl
